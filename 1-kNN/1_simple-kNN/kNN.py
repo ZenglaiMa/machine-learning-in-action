@@ -10,7 +10,7 @@ def create_dataset():
 
 def classify(input_x, dataset, labels, k):
     dataset_size = len(dataset)
-    # np.tile(a, (y, x)): 将a在Y轴方向复制y次, 在X轴方向复制x次, 返回维度不变.
+    # np.tile(a, (y, x)): 将a向Y轴方向复制y次, 向X轴方向复制x次.
     # 这样将input_x变成一个矩阵, 便于计算其和每一个样本的距离.
     input_mat = np.tile(input_x, (dataset_size, 1))
     # 计算欧氏距离
