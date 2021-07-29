@@ -12,7 +12,7 @@ def predict():
     fly_miles = float(input("每年获得的飞行常客里程数: "))
     ice_cream = float(input("每周消费的冰淇淋公升数: "))
 
-    input_x = np.array([percent_video_games, fly_miles, ice_cream])
+    input_x = np.array([fly_miles, percent_video_games, ice_cream])
 
     feature_mat, labels = get_data(os.path.join('./data', 'datingTestSet.txt'))
     feature_mat, x_min, x_range = normalization(feature_mat)  # 归一化
