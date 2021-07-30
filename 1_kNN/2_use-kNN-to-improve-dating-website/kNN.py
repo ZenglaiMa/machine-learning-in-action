@@ -9,7 +9,7 @@ def kNN(input_x, dataset, labels, k):
     input_mat = np.tile(input_x, (dataset_size, 1))
     # 计算欧氏距离
     distances = (np.sum((input_mat - dataset) ** 2, axis=1)) ** 0.5
-    # argsort()返回从小到大排序的索引值
+    # argsort()返回从小到大排序的索引值, 这样操作便于之后取label
     sorted_distance_ids = distances.argsort()
     # {key=class: value=count}
     class_count = {}
