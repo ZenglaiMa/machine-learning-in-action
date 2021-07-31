@@ -20,12 +20,12 @@ def get_data(data_path):
     filenames = os.listdir(data_path)
     files_num = len(filenames)
 
-    dataset = np.zeros((files_num, 1024))  # 数据集
+    feature_mat = np.zeros((files_num, 1024))  # 特征矩阵
     labels = []  # 标签
 
     for i in range(files_num):
         filename = filenames[i]
-        dataset[i] = img2vec(os.path.join(data_path, filename))
+        feature_mat[i] = img2vec(os.path.join(data_path, filename))
         labels.append(int(filename.split('_')[0]))
 
-    return dataset, labels
+    return feature_mat, labels
