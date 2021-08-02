@@ -75,8 +75,8 @@ def split_dataset(dataset, feature, feature_value):
 
 
 def choose_best_feature(dataset):
-    """选择用来划分数据集的最优(信息增益最大)的特征
-    信息增益 g(D, A) = H(D) - H(D|A) = H(D) - SUM(|D_v| / |D| * H(D_v))
+    """选择用来划分数据集的最优(ID3算法中为信息增益最大)的特征
+    信息增益 g(D, A) = H(D) - H(D|A) = H(D) - SUM(|D_v| / |D| * H(D_v)), D_v 为划分后的数据集
     Args:
         dataset - 数据集
     Returns:
