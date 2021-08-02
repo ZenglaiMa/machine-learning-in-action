@@ -1,34 +1,8 @@
 import math
 import operator
+import pickle  # 用于序列化对象, 将其保存到磁盘上
 
-
-def create_dataset():
-    """构建数据集
-    Returns:
-        data_set - 数据集
-        feature_name - 分类属性名
-    """
-    data_set = [
-        [0, 0, 0, 0, 'no'],
-        [0, 0, 0, 1, 'no'],
-        [0, 1, 0, 1, 'yes'],
-        [0, 1, 1, 0, 'yes'],
-        [0, 0, 0, 0, 'no'],
-        [1, 0, 0, 0, 'no'],
-        [1, 0, 0, 1, 'no'],
-        [1, 1, 1, 1, 'yes'],
-        [1, 0, 1, 2, 'yes'],
-        [1, 0, 1, 2, 'yes'],
-        [2, 0, 1, 2, 'yes'],
-        [2, 0, 1, 1, 'yes'],
-        [2, 1, 0, 1, 'yes'],
-        [2, 1, 0, 2, 'yes'],
-        [2, 0, 0, 0, 'no']
-    ]
-    # 特征(属性)
-    feature_list = ['年龄', '有工作', '有自己的房子', '信贷情况']
-
-    return data_set, feature_list
+from data_process import create_dataset
 
 
 def calc_shannon_entropy(dataset):
@@ -146,7 +120,18 @@ def create_decision_tree(dataset, feature_list):
     return decision_tree
 
 
+def store_tree(filename, tree):
+    """序列化决策树, 将其保存到磁盘上
+    Args:
+        filename - 文件名
+        tree - 待保存的决策树
+    """
+    with open(filename, mode='wb') as fp:
+        pickle.dump(tree, fp)
+
+
 if __name__ == '__main__':
     dataset, feature_list = create_dataset()
     decision_tree = create_decision_tree(dataset, feature_list)
-    print(decision_tree)
+    # print(decision_tree)
+    store_tree('./model/decision_tree', decision_tree)
