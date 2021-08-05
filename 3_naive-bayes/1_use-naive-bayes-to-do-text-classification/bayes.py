@@ -23,6 +23,7 @@ def create_dataset():
     Returns:
         feature_mat - 特征矩阵
         labels - 对应标签
+        vocab - 词表
     """
     document_list = [
         ['my', 'dog', 'has', 'flea', 'problems', 'help', 'please'],
