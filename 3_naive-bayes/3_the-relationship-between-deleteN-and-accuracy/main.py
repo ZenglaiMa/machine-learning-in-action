@@ -58,7 +58,7 @@ def sort_by_appear_frequency(data_list):
             if word in word_appear_dict:
                 word_appear_dict[word] += 1
             else:
-                word_appear_dict[word] = 1  # 对于未出现过的单词我们也令其出现次数为 1, 拉普拉斯平滑
+                word_appear_dict[word] = 1
     sorted_word_appear_dict = sorted(word_appear_dict.items(), key=lambda f: f[1], reverse=True)  # 按单词出现次数从大到小排序
     sorted_word_list, _ = zip(*sorted_word_appear_dict)
 
@@ -85,7 +85,7 @@ def extract_feature_words(all_words_list, delete_n, stopwords_set):
     """抽取特征词, 即从出现的所有词中抽取我们认为有用的词, 又即构建有用的词的词表
     Args:
         all_words_list (list): 所有出现的单词组成的列表, 已按词频从高到低排序好
-        delete_n (int): 删除词频高的 delete_n个词
+        delete_n (int): 删除词频高的前 delete_n个词
         stopwords_set (set): 停用词集合
     Returns:
         feature_words_dict (dict): 特征词字典, 键为特征词, 值为其索引
@@ -93,7 +93,7 @@ def extract_feature_words(all_words_list, delete_n, stopwords_set):
     feature_words_dict = {}
     n = 1
     for i in range(delete_n, len(all_words_list)):
-        if n > 1000:  # 抽取1000个特征词, 即我们将每个文档的维度设置为 1000
+        if n > 2000:  # 抽取2000个特征词, 即我们将每个文档的维度设置为 2000
             break
         word = all_words_list[i]
         if (not word.isdigit()) and (word not in stopwords_set) and (1 < len(word) < 5):  # 不是数字、不是停用词、长度大于1小于5, 才可被当做特征词
@@ -151,6 +151,7 @@ def test():
     train_data_list, train_label_list, test_data_list, test_label_list = process_raw_text(data_path)
     all_words_list = sort_by_appear_frequency(train_data_list)  # 获取训练集看过的所有单词, 已经按词频从大到小排序好
     stopwords_set = create_stopwords_set(stopwords_path)
+    print(len(all_words_list))
 
     # 以下代码探究删除 delete_n个词频高的词对最终分类精度的影响
     test_accuracies = []
