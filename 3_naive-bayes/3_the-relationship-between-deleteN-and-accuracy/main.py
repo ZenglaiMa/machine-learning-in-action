@@ -151,7 +151,6 @@ def test():
     train_data_list, train_label_list, test_data_list, test_label_list = process_raw_text(data_path)
     all_words_list = sort_by_appear_frequency(train_data_list)  # 获取训练集看过的所有单词, 已经按词频从大到小排序好
     stopwords_set = create_stopwords_set(stopwords_path)
-    print(len(all_words_list))
 
     # 以下代码探究删除 delete_n个词频高的词对最终分类精度的影响
     test_accuracies = []
