@@ -24,33 +24,58 @@ def sigmoid(x):
     return 1.0 / (1 + np.exp(-x))
 
 
-def train(X, Y):
+def train(X, Y, mode='bgd', epochs=500):
     """梯度下降法训练logistic regression的参数
     Args:
         X (np.array): 数据列表, 每一项为 [1.0, x1, x2], 在本例中 X.shape = (100, 3)
         Y (np.array): 标签列表, 在本例中 Y.shape = (100,)
+        mode (string, default): bgd -batch gradient descent, sgd -stochastic gradient descent
+        epochs (int): max epochs
     """
-    Y = Y.T.reshape(-1, 1)  # Y.shape = (100, 1)
-    _, n = np.shape(X)
-    weights = np.random.randn(n, 1)  # 随机初始化参数, 在本例中 weights.shape = (3, 1), 隐式 bias
-    lr = 0.001  # learning rate
+    m, n = np.shape(X)
 
-    max_epochs = 500
-    loss_list = []
-    for epoch in range(max_epochs):
-        A = sigmoid(np.matmul(X, weights))  # A.shape = (100, 1)
-        loss = -np.sum((np.multiply(Y, np.log(A)) + np.multiply(1 - Y, np.log(1 - A)))) / len(X)  # 计算 loss
-        loss_list.append(loss)
-        gradient = np.matmul(X.T, A - Y)  # 计算梯度
-        weights -= lr * gradient  # 梯度下降更新参数
-    # 画出loss走势图
-    plt.figure()
-    plt.plot(range(0, max_epochs), loss_list)
-    plt.xlabel('epoch')
-    plt.ylabel('loss')
-    plt.show()
+    if mode == 'bgd':
+        Y = Y.T.reshape(-1, 1)  # Y.shape = (100,) -> Y.shape = (100, 1)
+        weights = np.random.randn(n, 1)  # 随机初始化参数, 在本例中 weights.shape = (3, 1), 隐式 bias
+        lr = 0.001  # learning rate
+        loss_list = []
+        for epoch in range(epochs):
+            A = sigmoid(np.matmul(X, weights))  # A.shape = (100, 1)
+            loss = -np.sum(np.multiply(Y, np.log(A)) + np.multiply(1 - Y, np.log(1 - A))) / len(X)  # 计算 loss
+            loss_list.append(loss)
+            dw = np.matmul(X.T, A - Y)  # 计算梯度
+            weights -= lr * dw  # 梯度下降更新参数
+        # 画出loss走势图
+        plt.figure()
+        plt.plot(range(0, epochs), loss_list)
+        plt.xlabel('epoch')
+        plt.ylabel('loss')
+        plt.show()
+
+    elif mode == 'sgd':
+        weights = np.random.randn(n)
+        base_lr = 0.01  # 基准 learning rate
+        loss_list = []
+        for epoch in range(epochs):
+            loss = 0.0
+            data_index = list(range(m))
+            for i in range(m):
+                rand_index = int(np.random.uniform(0, len(data_index)))  # 随机选择一条数据
+                del(data_index[rand_index])
+                lr = 4 / (1.0 + i + epoch) + base_lr  # 动态 learning rate, 随着训练次数的增加而减小
+                a = sigmoid(np.dot(X[rand_index], weights))
+                loss -= Y[rand_index] * np.log(a) + (1 - Y[rand_index]) * np.log(1 - a)
+                dw = X[rand_index] * (a - Y[rand_index])  # 计算梯度
+                weights -= lr * dw  # 梯度下降
+            loss_list.append(loss / m)
+        # 画出loss走势图
+        plt.figure()
+        plt.plot(range(0, epochs), loss_list)
+        plt.xlabel('epoch')
+        plt.ylabel('loss')
+        plt.show()
 
 
 if __name__ == '__main__':
     datas, labels = get_data('./data/test-set.txt')
-    train(datas, labels)
+    train(datas, labels, mode='sgd')
