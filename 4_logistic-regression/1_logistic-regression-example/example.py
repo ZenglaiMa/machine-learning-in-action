@@ -61,12 +61,12 @@ def train(X, Y, mode='bgd', epochs=500):
             data_index = list(range(m))
             for i in range(m):
                 rand_index = int(np.random.uniform(0, len(data_index)))  # 随机选择一条数据
-                del(data_index[rand_index])
                 lr = 4 / (1.0 + i + epoch) + base_lr  # 动态 learning rate, 随着训练次数的增加而减小
-                a = sigmoid(np.dot(X[rand_index], weights))
-                loss -= Y[rand_index] * np.log(a) + (1 - Y[rand_index]) * np.log(1 - a)
-                dw = X[rand_index] * (a - Y[rand_index])  # 计算梯度
+                a = sigmoid(np.dot(X[data_index[rand_index]], weights))
+                loss -= Y[data_index[rand_index]] * np.log(a) + (1 - Y[data_index[rand_index]]) * np.log(1 - a)
+                dw = X[data_index[rand_index]] * (a - Y[data_index[rand_index]])  # 计算梯度
                 weights -= lr * dw  # 梯度下降
+                del(data_index[rand_index])
             loss_list.append(loss / m)
         # 画出loss走势图
         plt.figure()
@@ -78,4 +78,4 @@ def train(X, Y, mode='bgd', epochs=500):
 
 if __name__ == '__main__':
     datas, labels = get_data('./data/test-set.txt')
-    train(datas, labels, mode='sgd')
+    train(datas, labels, mode='sgd', epochs=300)

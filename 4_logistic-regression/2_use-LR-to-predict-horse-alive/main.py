@@ -49,14 +49,15 @@ def train_lr(X, Y, epochs=150):
         data_index = list(range(sample_num))
         for i in range(sample_num):  # 随机梯度下降, 每随机经过一个样本都执行一次梯度下降
             rand_index = int(np.random.uniform(0, len(data_index)))  # 随机选择一条样本
-            del(data_index[rand_index])
             lr = 4 / (1.0 + epoch + i) + base_lr  # 动态 learning rate, 随训练进行越来越小
 
-            a = sigmoid(np.dot(X[rand_index], weights) + bias)
-            dw = X[rand_index] * (a - Y[rand_index])  # 计算梯度
-            db = a - Y[rand_index]
+            a = sigmoid(np.dot(X[data_index[rand_index]], weights) + bias)
+            dw = X[data_index[rand_index]] * (a - Y[data_index[rand_index]])  # 计算梯度
+            db = a - Y[data_index[rand_index]]
             weights -= lr * dw  # 梯度下降
             bias -= lr * db
+
+            del(data_index[rand_index])
 
     return weights, bias
 
